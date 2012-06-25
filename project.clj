@@ -4,4 +4,6 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[de.flapdoodle.embedmongo/de.flapdoodle.embedmongo "1.16"]]
-  :eval-in-leiningen true)
+  :eval-in-leiningen true
+  :plugins [[lein-release "1.0.0"]]
+  :lein-release {:deploy-via :clojars})
