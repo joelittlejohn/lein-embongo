@@ -1,6 +1,6 @@
 # lein-embongo _(emb[edded m]ongo)_
 
-A Leiningen plugin to run an 'embedded' instance of MongoDB during a build (e.g. for integration testing).
+A Leiningen 2 plugin to run an 'embedded' instance of MongoDB during a build (e.g. for integration testing).
 
 ## Usage
 
