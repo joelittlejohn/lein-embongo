@@ -41,7 +41,7 @@
   "Start an instance of MongoDB, run the given task, then stop MongoDB"
   [project task & args]
   (let [port (get-config-value project :mongo-port 27017)
-        version (get-config-value project :mongo-version Version/V2_0_5)
+        version (get-version (get-config-value project :mongo-version "2.0.5"))
         data-dir (project :mongo-data-dir)
         proxy-host (project :mongo-download-proxy-host)
         proxy-port (get-config-value project :mongo-download-proxy-port 80)]
