@@ -21,7 +21,7 @@ There are few optional config parameters that control how MongoDB runs:
 (defproject my-project "1.0.0-SNAPSHOT"
   :plugins [[lein-embongo "0.1.1"]]
   :mongo-port 37017 ;optional, default 27017
-  :mongo-version "2.0.4" ;optional, default 2.1.1
+  :mongo-version "2.0.4" ;optional, default 2.0.5
   :mongo-data-dir "/tmp/mongo-data-files" ;optional, default is a new dir in java.io.tmpdir
   :mongo-download-proxy-host "proxy.mycompany.com" ;optional, default is none
   :mongo-download-proxy-port 8080) ;optional, default 80
