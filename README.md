@@ -6,7 +6,7 @@ The Mongo instance isn't strictly embedded (it's not running within the JVM of y
 
 ## Usage
 
-Put `[lein-embongo "0.1.1"]` into the `:plugins` vector of your project.clj.
+Put `[lein-embongo "0.1.2"]` into the `:plugins` vector of your project.clj.
 
 Invoke the embongo task, providing the name of some other task that should be run after starting MongoDB, e.g.
 
@@ -19,7 +19,7 @@ There are few optional config parameters that control how MongoDB runs:
 
 ```clojure
 (defproject my-project "1.0.0-SNAPSHOT"
-  :plugins [[lein-embongo "0.1.1"]]
+  :plugins [[lein-embongo "0.1.2"]]
   :mongo-port 37017 ;optional, default 27017
   :mongo-version "2.0.4" ;optional, default 2.0.5
   :mongo-data-dir "/tmp/mongo-data-files" ;optional, default is a new dir in java.io.tmpdir
