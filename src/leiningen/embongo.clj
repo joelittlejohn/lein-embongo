@@ -1,10 +1,12 @@
 (ns leiningen.embongo
   (:require [clojure.string :as string]
+            [clojure.java.io :as io]
             [leiningen.core.main :as main])
   (:import [java.net InetSocketAddress Proxy Proxy$Type ProxySelector]
            [de.flapdoodle.embedmongo MongoDBRuntime MongodExecutable MongodProcess]
-           [de.flapdoodle.embedmongo.config MongodConfig]
+           [de.flapdoodle.embedmongo.config MongodConfig MongodProcessOutputConfig RuntimeConfig]
            [de.flapdoodle.embedmongo.distribution Version]
+           [de.flapdoodle.embedmongo.io NamedOutputStreamProcessor IStreamProcessor]
            [de.flapdoodle.embedmongo.runtime Network]))
 
 (defn- get-version [version-as-string]
@@ -25,9 +27,28 @@
                                     (.select default-selector uri)))
                                 (connectFailed [uri address ex] ())))))
 
+(def logging-lock (Object.))
+(def file-stream-processor
+  (proxy [IStreamProcessor] []
+    (process [block]
+      (locking logging-lock
+        (with-open [writer (io/writer "embongo.log" :append true)]
+          (.write writer block))))
+    (onProcessed []
+      (.process this "\n"))))
+
+(def logger-config (MongodProcessOutputConfig.
+                    (NamedOutputStreamProcessor. "[mongod output]" file-stream-processor)
+                    (NamedOutputStreamProcessor. "[mongod error]" file-stream-processor)
+                    file-stream-processor))
+
+(def runtime-config
+  (doto (RuntimeConfig.)
+    (.setMongodOutputConfig logger-config)))
+
 (defn- start-mongo [version port data-dir]
   (.. MongoDBRuntime
-      (getDefaultInstance)
+      (getInstance runtime-config)
       (prepare (MongodConfig. version port (Network/localhostIsIPv6) data-dir))
       (start)))
 
