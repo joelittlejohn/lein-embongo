@@ -5,18 +5,9 @@
   (:import [java.net InetSocketAddress Proxy Proxy$Type ProxySelector]
            [de.flapdoodle.embedmongo MongoDBRuntime MongodExecutable MongodProcess]
            [de.flapdoodle.embedmongo.config MongodConfig MongodProcessOutputConfig RuntimeConfig]
-           [de.flapdoodle.embedmongo.distribution Version]
+           [de.flapdoodle.embedmongo.distribution GenericVersion]
            [de.flapdoodle.embedmongo.io NamedOutputStreamProcessor IStreamProcessor]
            [de.flapdoodle.embedmongo.runtime Network]))
-
-(defn- get-version [version-as-string]
-  (try 
-    (Version/valueOf (str "V" (-> version-as-string
-                                  (string/upper-case)
-                                  (string/replace  "." "_"))))
-    (catch IllegalArgumentException e
-      (throw (RuntimeException.
-              (str "Unrecognised MongoDB version '" version-as-string "', try one of the following " (reduce #(str %1 ", " %2) (.getEnumConstants Version))))))))
 
 (defn- add-proxy-selector! [proxy-host proxy-port]
   (let [default-selector (ProxySelector/getDefault)]
@@ -62,7 +53,7 @@
   "Start an instance of MongoDB, run the given task, then stop MongoDB"
   [project task & args]
   (let [port (get-config-value project :mongo-port 27017)
-        version (get-version (get-config-value project :mongo-version "2.0.5"))
+        version (GenericVersion. (get-config-value project :mongo-version "2.0.5"))
         data-dir (project :mongo-data-dir)
         proxy-host (project :mongo-download-proxy-host)
         proxy-port (get-config-value project :mongo-download-proxy-port 80)]
