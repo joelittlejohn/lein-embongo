@@ -27,8 +27,9 @@ There are few optional config parameters that control how MongoDB runs:
   :mongo-download-proxy-port 8080) ;optional, default 80
 ```
 
-## Tips
+## Notes
 
+* All mongod output appears in `./embongo.log`
 * If you want to run many lein builds in parallel using Jenkins, try the [Port Allocator Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Port+Allocator+Plugin) to avoid port conflicts. If you assign a port to $MONGO_PORT, you can set the `:mongo-port` config option for embongo like:
 
 ```clojure
