@@ -15,7 +15,7 @@ Invoke the embongo task, providing the name of some other task that should be ru
 Once the task is complete, MongoDB will be stopped.
 
 ### Additional config
-There are few optional config parameters that control how MongoDB runs:
+There are a few optional config parameters that control how MongoDB runs:
 
 ```clojure
 (defproject my-project "1.0.0-SNAPSHOT"
