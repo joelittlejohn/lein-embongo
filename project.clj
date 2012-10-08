@@ -6,4 +6,8 @@
   :dependencies [[de.flapdoodle.embedmongo/de.flapdoodle.embedmongo "1.17"]]
   :eval-in-leiningen true
   :plugins [[lein-release "1.0.1-SNAPSHOT"]]
-  :lein-release {:deploy-via :clojars})
+  :lein-release {:deploy-via :clojars}
+
+  :embongo {:port 37017
+            :version "2.0.4"
+            :data-dir "/tmp/xxx"})

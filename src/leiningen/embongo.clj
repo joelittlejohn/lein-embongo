@@ -46,17 +46,17 @@
 (defn- stop-mongo [mongod]
   (.stop mongod))
 
-(defn- get-config-value [project x default]
-  (if (nil? (project x)) default (project x)))
+(defn- get-config-value [project k default]
+  (get (project :embongo) k default))
 
 (defn embongo
   "Start an instance of MongoDB, run the given task, then stop MongoDB"
   [project task & args]
-  (let [port (get-config-value project :mongo-port 27017)
-        version (GenericVersion. (get-config-value project :mongo-version "2.0.6"))
-        data-dir (project :mongo-data-dir)
-        proxy-host (project :mongo-download-proxy-host)
-        proxy-port (get-config-value project :mongo-download-proxy-port 80)]
+  (let [port (get-config-value project :port 27017)
+        version (GenericVersion. (get-config-value project :version "2.0.6"))
+        data-dir (get-in project [:embongo :data-dir])
+        proxy-host (get-in project [:embongo :download-proxy-host])
+        proxy-port (get-config-value project :download-proxy-port 80)]
     (if (not (nil? proxy-host)) (add-proxy-selector! proxy-host proxy-port))
     (let [mongod (start-mongo version port data-dir)]
       (try (main/apply-task task project args)
