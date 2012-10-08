@@ -51,7 +51,7 @@
 
 (defn embongo
   "Start an instance of MongoDB, run the given task, then stop MongoDB"
-  [project task & args]
+  [project & args]
   (let [port (get-config-value project :port 27017)
         version (GenericVersion. (get-config-value project :version "2.0.6"))
         data-dir (get-in project [:embongo :data-dir])
@@ -59,5 +59,7 @@
         proxy-port (get-config-value project :download-proxy-port 80)]
     (if (not (nil? proxy-host)) (add-proxy-selector! proxy-host proxy-port))
     (let [mongod (start-mongo version port data-dir)]
-      (try (main/apply-task task project args)
-           (finally (stop-mongo mongod))))))
+      (if (seq args)
+        (try (main/apply-task (first args) project (rest args))
+             (finally (stop-mongo mongod)))
+        (while true (Thread/sleep 5000))))))
