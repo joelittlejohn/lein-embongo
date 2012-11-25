@@ -9,5 +9,4 @@
   :lein-release {:deploy-via :clojars}
 
   :embongo {:port 37017
-            :version "2.0.4"
             :data-dir "/tmp/xxx"})
