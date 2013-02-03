@@ -14,6 +14,10 @@ Invoke the embongo task, providing the name of some other task that should be ru
 
 Once the task is complete, MongoDB will be stopped.
 
+If for some reason you'd like lein to start the embedded mongo instance and wait, you can invoke the `embongo` task without providing any further tasks, like:
+
+    $ lein embongo
+
 ### Additional config
 There are a few optional config parameters that control how MongoDB runs:
 
