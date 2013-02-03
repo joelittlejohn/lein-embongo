@@ -18,6 +18,8 @@ If for some reason you'd like lein to start the embedded mongo instance and wait
 
     $ lein embongo
 
+When you want to stop MongoDB just press <kbd>Ctrl</kbd>+<kbd>C</kbd>.
+
 ### Additional config
 There are a few optional config parameters that control how MongoDB runs:
 
