@@ -3,10 +3,11 @@
   :url "https://github.com/joelittlejohn/lein-embongo"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[de.flapdoodle.embedmongo/de.flapdoodle.embedmongo "1.17"]]
+  :dependencies [[de.flapdoodle.embed/de.flapdoodle.embed.mongo "1.31"]]
   :eval-in-leiningen true
   :plugins [[lein-release "1.0.4"]]
   :lein-release {:deploy-via :clojars}
 
   :embongo {:port 37017
-            :data-dir "/tmp/xxx"})
+            :data-dir "/tmp/xxx"
+            :version "2.4.1"})

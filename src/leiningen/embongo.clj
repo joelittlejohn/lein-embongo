@@ -2,12 +2,14 @@
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
             [leiningen.core.main :as main])
-  (:import [java.net InetSocketAddress Proxy Proxy$Type ProxySelector]
-           [de.flapdoodle.embedmongo MongoDBRuntime MongodExecutable MongodProcess]
-           [de.flapdoodle.embedmongo.config MongodConfig MongodProcessOutputConfig RuntimeConfig]
-           [de.flapdoodle.embedmongo.distribution GenericVersion]
-           [de.flapdoodle.embedmongo.io NamedOutputStreamProcessor IStreamProcessor]
-           [de.flapdoodle.embedmongo.runtime Network]))
+  (:import [de.flapdoodle.embed.mongo Command MongodExecutable MongodProcess MongodStarter MongodStarter]
+           [de.flapdoodle.embed.mongo.config RuntimeConfigBuilder MongodConfig AbstractMongoConfig]
+           [de.flapdoodle.embed.mongo.distribution Version]
+           [de.flapdoodle.embed.process.config.io ProcessOutput]
+           [de.flapdoodle.embed.process.distribution GenericVersion]
+           [de.flapdoodle.embed.process.io IStreamProcessor NamedOutputStreamProcessor]
+           [de.flapdoodle.embed.process.runtime Network]
+           [java.net InetSocketAddress Proxy Proxy$Type ProxySelector]))
 
 (defn- add-proxy-selector! [proxy-host proxy-port]
   (let [default-selector (ProxySelector/getDefault)]
@@ -28,38 +30,37 @@
     (onProcessed []
       (.process this "\n"))))
 
-(def logger-config (MongodProcessOutputConfig.
-                    (NamedOutputStreamProcessor. "[mongod output]" file-stream-processor)
-                    (NamedOutputStreamProcessor. "[mongod error]" file-stream-processor)
-                    file-stream-processor))
+(def logger (ProcessOutput.
+             (NamedOutputStreamProcessor. "[mongod output]" file-stream-processor)
+             (NamedOutputStreamProcessor. "[mongod error]" file-stream-processor)
+             (NamedOutputStreamProcessor. "[mongod commands]" file-stream-processor)))
 
 (def runtime-config
-  (doto (RuntimeConfig.)
-    (.setMongodOutputConfig logger-config)))
+  (-> (RuntimeConfigBuilder.)
+      (.defaults Command/MongoD)
+      (.processOutput logger)
+      (.build)))
 
 (defn- start-mongo [version port data-dir]
-  (.. MongoDBRuntime
+  (.. MongodStarter
       (getInstance runtime-config)
       (prepare (MongodConfig. version port (Network/localhostIsIPv6) data-dir))
       (start)))
 
-(defn- stop-mongo [mongod]
-  (.stop mongod))
-
-(defn- get-config-value [project k default]
+(defn- config-value [project k default]
   (get (project :embongo) k default))
 
 (defn embongo
   "Start an instance of MongoDB, run the given task, then stop MongoDB"
   [project & args]
-  (let [port (get-config-value project :port 27017)
-        version (GenericVersion. (get-config-value project :version "2.2.1"))
+  (let [port (config-value project :port 27017)
+        version (GenericVersion. (config-value project :version "2.2.1"))
         data-dir (get-in project [:embongo :data-dir])
         proxy-host (get-in project [:embongo :download-proxy-host])
-        proxy-port (get-config-value project :download-proxy-port 80)]
-    (if (not (nil? proxy-host)) (add-proxy-selector! proxy-host proxy-port))
+        proxy-port (config-value project :download-proxy-port 80)]
+    (when (not (nil? proxy-host)) (add-proxy-selector! proxy-host proxy-port))
     (let [mongod (start-mongo version port data-dir)]
       (if (seq args)
         (try (main/apply-task (first args) project (rest args))
-             (finally (stop-mongo mongod)))
+             (finally (.stop mongod)))
         (while true (Thread/sleep 5000))))))
