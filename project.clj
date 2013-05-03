@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[de.flapdoodle.embedmongo/de.flapdoodle.embedmongo "1.17"]]
   :eval-in-leiningen true
-  :plugins [[lein-release "1.0.1-SNAPSHOT"]]
+  :plugins [[lein-release "1.0.4"]]
   :lein-release {:deploy-via :clojars}
 
   :embongo {:port 37017
