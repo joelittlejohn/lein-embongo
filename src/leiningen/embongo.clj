@@ -16,7 +16,7 @@
     (ProxySelector/setDefault (proxy [ProxySelector] []
                                 (select [uri]
                                   (if (= (.getHost uri) "fastdl.mongodb.org")
-                                    (list (Proxy. Proxy$Type/HTTP (.InetSocketAddress proxy-host proxy-port)))
+                                    (list (Proxy. Proxy$Type/HTTP (InetSocketAddress. proxy-host proxy-port)))
                                     (.select default-selector uri)))
                                 (connectFailed [uri address ex] ())))))
 
