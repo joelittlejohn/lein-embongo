@@ -41,7 +41,7 @@ There are a few optional config parameters that control how MongoDB runs:
 ```clojure
 (defproject my-project "1.0.0-SNAPSHOT"
   :embongo {
-    :port ~(Integer. (get (System/getenv) "MONGO_PORT" 27017)) ;uses port 27017 if env var is not set
+  :port ~(Integer. (get (System/getenv) "MONGO_PORT" 27017)) ;uses port 27017 if env var is not set
   ...
 ```
 
