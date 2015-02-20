@@ -1,4 +1,4 @@
-(defproject lein-embongo "0.2.2"
+(defproject lein-embongo "0.2.3-SNAPSHOT"
   :description "lein plugin wrapper for the flapdoodle.do embedded MongoDB API"
   :url "https://github.com/joelittlejohn/lein-embongo"
   :license {:name "Eclipse Public License"
