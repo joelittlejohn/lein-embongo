@@ -47,6 +47,6 @@ There are a few optional config parameters that control how MongoDB runs:
 
 ## License
 
-Copyright © 2012 Joe Littlejohn
+Copyright © 2017 Joe Littlejohn
 
 Distributed under the [Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html), the same as Clojure.
