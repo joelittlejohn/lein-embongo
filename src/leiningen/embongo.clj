@@ -4,9 +4,9 @@
             [leiningen.core.main :as main])
   (:import [de.flapdoodle.embed.mongo Command MongodStarter]
            [de.flapdoodle.embed.mongo.config RuntimeConfigBuilder MongodConfigBuilder Net Storage]
-           [de.flapdoodle.embed.mongo.distribution Feature Version Versions]
+           [de.flapdoodle.embed.mongo.distribution Feature Version Versions Version$Main]
            [de.flapdoodle.embed.process.config.io ProcessOutput]
-           [de.flapdoodle.embed.process.distribution IVersion]
+           [de.flapdoodle.embed.process.distribution IVersion GenericVersion]
            [de.flapdoodle.embed.process.io IStreamProcessor NamedOutputStreamProcessor]
            [de.flapdoodle.embed.process.runtime Network]
            [java.net InetSocketAddress Proxy Proxy$Type ProxySelector]))
@@ -43,7 +43,7 @@
 
 (defn- parse-version [v]
   (try
-    (Version/valueOf v)
+    (Versions/withFeatures (new GenericVersion v) (.getFeatures Version$Main/PRODUCTION))
     (catch IllegalArgumentException e
       (Versions/withFeatures (reify IVersion (asInDownloadPath [_] v)) (make-array Feature 0)))))
 

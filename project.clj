@@ -3,7 +3,7 @@
   :url "https://github.com/joelittlejohn/lein-embongo"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[de.flapdoodle.embed/de.flapdoodle.embed.mongo "2.0.0"]]
+  :dependencies [[de.flapdoodle.embed/de.flapdoodle.embed.mongo "2.1.1"]]
   :eval-in-leiningen true
   :repositories [["releases" {:url "https://clojars.org/repo"
                               :creds :gpg}]]
